@@ -1,7 +1,10 @@
 {
   "build": {
     "android": {},
-    "ios": {}
+    "ios": {},
+    "production": {
+      "android": {},
+      "ios": {}
+    }
   }
 }
-
