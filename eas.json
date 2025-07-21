@@ -1,10 +1,23 @@
 {
   "build": {
-    "android": {},
-    "ios": {},
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "cli": {
+        "appVersionSource": "node"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "cli": {
+        "appVersionSource": "node"
+      }
+    },
     "production": {
-      "android": {},
-      "ios": {}
+      "distribution": "store",
+      "cli": {
+        "appVersionSource": "node"
+      }
     }
   }
 }
