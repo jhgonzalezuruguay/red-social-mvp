@@ -1,25 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, FlatList } from 'react-native';
-import { db } from './firebaseConfig';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+// FeedScreen.js
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, Button, FlatList } from "react-native";
+import { db } from "./firebaseConfig";
 
 export default function FeedScreen() {
-  const [post, setPost] = useState('');
+  const [post, setPost] = useState("");
   const [posts, setPosts] = useState([]);
 
   const publishPost = async () => {
-    await addDoc(collection(db, 'posts'), {
-      content: post,
-      createdAt: Date.now(),
-    });
-    setPost('');
-    loadPosts();
+    try {
+      await db.collection("posts").add({
+        content: post,
+        createdAt: Date.now()
+      });
+      setPost("");
+      loadPosts();
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
   const loadPosts = async () => {
-    const snapshot = await getDocs(collection(db, 'posts'));
-    const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    setPosts(list);
+    try {
+      const snapshot = await db.collection("posts").get();
+      const list = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setPosts(list);
+    } catch (e) {
+      alert(e.message);
+    }
   };
 
   useEffect(() => {
@@ -43,3 +54,4 @@ export default function FeedScreen() {
     </View>
   );
 }
+
