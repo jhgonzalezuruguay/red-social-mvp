@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
-import { auth } from './firebaseConfig';
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+// LoginScreen.js
+import React, { useState } from "react";
+import { View, TextInput, Button, Text } from "react-native";
+import { auth } from "./firebaseConfig";
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const register = async () => {
-    await createUserWithEmailAndPassword(auth, email, password);
+    try {
+      await auth.createUserWithEmailAndPassword(email, password);
+      setError("");
+    } catch (e) {
+      setError(e.message);
+    }
   };
 
   const login = async () => {
-    await signInWithEmailAndPassword(auth, email, password);
-    navigation.navigate('Feed');
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      setError("");
+      navigation.navigate("Feed");
+    } catch (e) {
+      setError(e.message);
+    }
   };
 
   return (
@@ -24,6 +35,8 @@ export default function LoginScreen({ navigation }) {
       <TextInput value={password} onChangeText={setPassword} secureTextEntry />
       <Button title="Registrarse" onPress={register} />
       <Button title="Iniciar sesión" onPress={login} />
+      {error ? <Text style={{ color: "red" }}>{error}</Text> : null}
     </View>
   );
 }
+
